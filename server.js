@@ -57,10 +57,10 @@ function getBase64Image(req) {
  */
 app.post('/api/register', async (req, res) => {
   try {
-    const { studentUID, image1, image2, image3 } = req.body;
+    const { studentUID, name, rollNo, email, image1, image2, image3 } = req.body;
     
-    if (!studentUID || !image1 || !image2 || !image3) {
-      return res.status(400).json({ error: 'Missing required parameters (studentUID, image1, image2, image3)' });
+    if (!studentUID || !name || !rollNo || !email || !image1 || !image2 || !image3) {
+      return res.status(400).json({ error: 'Missing required parameters (studentUID, name, rollNo, email, image1, image2, image3)' });
     }
 
     if (!isModelsLoaded()) await loadModels();
@@ -80,6 +80,9 @@ app.post('/api/register', async (req, res) => {
 
     // Save to Firestore
     await db.collection('users').doc(studentUID).set({
+      name,
+      rollNo,
+      email,
       faceDescriptor: descriptorArray,
       registeredAt: admin.firestore.FieldValue.serverTimestamp(),
       testMode: false,
