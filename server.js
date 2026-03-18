@@ -18,11 +18,14 @@ try {
     const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
     admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
   } else {
-    admin.initializeApp();
+    console.error('❌ FATAL: Missing GOOGLE_APPLICATION_CREDENTIALS_JSON in Environment Variables!');
+    process.exit(1);
   }
   console.log('✅ Firebase Admin initialized');
 } catch (e) {
-  console.warn('⚠️ Firebase Admin not initialized.');
+  console.error('❌ FATAL: Failed to initialize Firebase Admin. Is your JSON valid?');
+  console.error(e.message);
+  process.exit(1);
 }
 const db = admin.firestore();
 
